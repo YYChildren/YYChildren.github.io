@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>YYChildren&#39;s Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="YYChildren&#39;s Garden">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="YYChildren&#39;s Garden">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="YYChildren&#39;s Garden">
+  
+    <link rel="alternate" href="/atom.xml" title="YYChildren&#39;s Garden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YYChildren&#39;s Garden</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">杯水长情</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-econfig" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/01/econfig/" class="article-date">
+  <time datetime="2017-11-01T15:31:30.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>在使用erlang 编程的时候，经常需要抽离配置文件。</p>
+<p>通常配置方式有以下三种:</p>
+<ol>
+<li>使用ets存储。</li>
+<li>使用erlang 的 application environment，实际上也是使用ets存储的。<a href="http://erlang.org/doc/man/config.html" target="_blank" rel="noopener">文档参考</a></li>
+<li>使用动态编译，将配置编译成erlang模块。这样程序可以直接访问代码区，并且无锁，另外由于erlang本身将代码保存两份的热更新机制，在更新配置的时候不会出现短暂读取不到配置的情况。单这种方案有个缺点，在配置过多的情况下，动态编译会比较慢。</li>
+</ol>
+<h2 id="使用动态编译构建配置"><a href="#使用动态编译构建配置" class="headerlink" title="使用动态编译构建配置"></a>使用动态编译构建配置</h2><ul>
+<li>我根据ejabberd的dynamic_compile.erl 构建了一个简单的基于动态编译的配置方案： <a href="https://github.com/YYChildren/econfig" target="_blank" rel="noopener">econfig</a></li>
+<li>使用例子<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">KVs = [&#123;<span class="number">1</span>,<span class="number">1</span>&#125;, &#123;<span class="number">2</span>,<span class="number">2</span>&#125;, &#123;<span class="number">3</span>,<span class="number">3</span>&#125;],</span><br><span class="line">TestCase = [</span><br><span class="line">    &#123;test1, KVs&#125;,</span><br><span class="line">    &#123;test2, <span class="keyword">fun</span>() -&gt; KVs <span class="keyword">end</span>&#125;</span><br><span class="line">],</span><br><span class="line"></span><br><span class="line">econfig:reload_config(TestCase),</span><br><span class="line"><span class="comment">%% or</span></span><br><span class="line">[econfig:reload_config(TestCase) || C &lt;- TestCase],</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 访问单个配置</span></span><br><span class="line"><span class="number">1</span> = econfig:find(test1, <span class="number">1</span>),</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 访问不存在的配置</span></span><br><span class="line">undefined = econfig:all(<span class="number">4</span>),</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 访问所有配置（根据key排序）</span></span><br><span class="line">KVs = econfig:all(test1).</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/11/01/econfig/" data-id="cjfdarv6t00019kqlnbr9vrt0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-parse-json-in-impala" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/17/parse-json-in-impala/" class="article-date">
+  <time datetime="2017-10-17T14:42:20.000Z" itemprop="datePublished">2017-10-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>直接通过hql查询字段为json字符串里的值，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">获取&apos;&#123;&quot;keyword&quot;:1&#125;&apos; 的keyword值 1</span><br></pre></td></tr></table></figure></p>
+<h2 id="网上相关的文章"><a href="#网上相关的文章" class="headerlink" title="网上相关的文章"></a>网上相关的文章</h2><ul>
+<li><p><strong>相关issue</strong>： <a href="https://issues.apache.org/jira/browse/IMPALA-376" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/IMPALA-376</a></p>
+</li>
+<li><p>这篇issue提到impala官方仍然为实现impala的json函数，但是评论中有提到2中方法</p>
+</li>
+</ul>
+<ol>
+<li>直接引用hive的udf</li>
+<li>开源的实现：  <a href="https://github.com/nazgul33/impala-get-json-object-udf" target="_blank" rel="noopener">https://github.com/nazgul33/impala-get-json-object-udf</a></li>
+</ol>
+<ul>
+<li><p>为了简单起见，我直接使用了第一种方案，impala引入HiveUDF的方法参考： <a href="https://www.cloudera.com/documentation/enterprise/latest/topics/impala_udf.html#udfs_hive" target="_blank" rel="noopener">https://www.cloudera.com/documentation/enterprise/latest/topics/impala_udf.html#udfs_hive</a></p>
+</li>
+<li><p>该函数的使用方法参考：<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF</a> </p>
+</li>
+</ul>
+<h2 id="在CDH-集群上的实现"><a href="#在CDH-集群上的实现" class="headerlink" title="在CDH 集群上的实现"></a>在CDH 集群上的实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo -u impala hadoop fs -mkdir -p /user/impala/udf</span><br><span class="line">sudo -u impala hadoop fs -put -f /opt/cloudera/parcels/CDH/jars/hive-exec-*.jar /user/impala/udf/hive-exec.jar</span><br><span class="line">impala-shell -q &quot;</span><br><span class="line">CREATE DATABASE IF NOT EXISTS udf;</span><br><span class="line">USE udf;</span><br><span class="line">DROP FUNCTION IF EXISTS udf.get_json_object(string, string);</span><br><span class="line">CREATE FUNCTION udf.get_json_object(string, string) returns string location &apos;/user/impala/udf/hive-exec.jar&apos; symbol=&apos;org.apache.hadoop.hive.ql.udf.UDFJson&apos;;</span><br><span class="line">&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Query: select udf.get_json_object(&apos;&#123;&quot;keyword&quot;:1&#125;&apos;, &apos;$.keyword&apos;)</span><br><span class="line">+---------------------------------------------------+</span><br><span class="line">| udf.get_json_object(&apos;&#123;&quot;keyword&quot;:1&#125;&apos;, &apos;$.keyword&apos;) |</span><br><span class="line">+---------------------------------------------------+</span><br><span class="line">| 1                                                 |</span><br><span class="line">+---------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/10/17/parse-json-in-impala/" data-id="cjfdarv7s00049kqly3b8zvbd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-pyspark-error" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/01/pyspark-error/" class="article-date">
+  <time datetime="2017-04-01T03:29:49.000Z" itemprop="datePublished">2017-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="运行代码"><a href="#运行代码" class="headerlink" title="运行代码"></a>运行代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># pyspark</span><br><span class="line">&gt;&gt;&gt; textFile = sc.textFile(&quot;/tmp/1.sh&quot;)</span><br><span class="line">&gt;&gt;&gt; textFile.count()</span><br></pre></td></tr></table></figure>
+<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python in worker has different version 2.6 than that in driver 2.7, PySpark cannot run with different minor versions</span><br></pre></td></tr></table></figure>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><ul>
+<li>pytspark 启动时使用的是python2.7</li>
+<li>内部脚本设置的PYSPARK_PYTHON 是python2.6</li>
+</ul>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>增加 config/spark-env.sh 配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PYSPARK_PYTHON=/usr/local/bin/python</span><br></pre></td></tr></table></figure></p>
+<h2 id="CDH-解决办法"><a href="#CDH-解决办法" class="headerlink" title="CDH 解决办法"></a>CDH 解决办法</h2><p><img src="https://leanote.com/api/file/getImage?fileId=58df1f8cab64413a33001d46" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/01/pyspark-error/" data-id="cjfdarv8900089kqlc8h7lond" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-namenode-start-failed-for-snapshot" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/05/namenode-start-failed-for-snapshot/" class="article-date">
+  <time datetime="2017-02-05T12:25:37.000Z" itemprop="datePublished">2017-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="事件回顾"><a href="#事件回顾" class="headerlink" title="事件回顾"></a>事件回顾</h2><p>2017-02-03 14:14 时看到Hadoop Namenode的swap占用较高，于是尝试重启NameNode以释放Swap。想不到竟然无法启动。</p>
+<p>日志如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">2017-02-03 14:15:09,218 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode: Failed to start namenode.</span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.INodeDirectory.addChild(INodeDirectory.java:531)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatPBINode$Loader.addToParent(FSImageFormatPBINode.java:252)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatPBINode$Loader.loadINodeDirectorySection(FSImageFormatPBINode.java:202)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.loadInternal(FSImageFormatProtobuf.java:261)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.load(FSImageFormatProtobuf.java:180)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormat$LoaderDelegator.load(FSImageFormat.java:226)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:929)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:913)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImageFile(FSImage.java:732)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:668)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:281)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1061)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:765)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:604)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:663)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:830)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:814)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1507)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1575)</span><br><span class="line">2017-02-03 14:15:09,238 INFO org.apache.hadoop.util.ExitUtil: Exiting with status 1</span><br></pre></td></tr></table></figure>
+<h2 id="Hadoop-版本信息"><a href="#Hadoop-版本信息" class="headerlink" title="Hadoop 版本信息"></a>Hadoop 版本信息</h2><p>我们当时使用的Hadoop版本为CDH5.4.9</p>
+<h2 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h2><ol>
+<li>Google之，得到Apache 官方有提到该Bug<br> 地址：<a href="https://issues.apache.org/jira/browse/HDFS-9406" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/HDFS-9406</a></li>
+<li>另外CDH官方有提到解决该问题的版本<br> 地址：<a href="https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_rn_fixed_in_54.html#fixed_issues_5410" target="_blank" rel="noopener">https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_rn_fixed_in_54.html#fixed_issues_5410</a></li>
+<li><p>问题解释<br> 当删除一个包含INode的最新记录的快照时，fsimage有可能崩溃，因为更早快照的diff的create-list 和 父亲INodeDirectory的child list没有清理。</p>
+<blockquote>
+<p>When deleting a snapshot that contains the last record of a given INode, the fsimage may become corrupt because the create list of the snapshot diff in the previous snapshot and the child list of the parent INodeDirectory are not cleaned.</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><ol>
+<li>尝试以 2017-02-03 12 时的 fsimage 恢复，发现问题依旧。</li>
+<li>升级CDH 版本到5.4.11，发现问题依旧</li>
+<li>继续升级版本到5.7.5，发现问题依旧</li>
+<li>查看修复版本的关键文件 INodeDirectory.java、FSImageFormatPBINode.java、FSImageFormatProtobuf.java（位于<a href="https://github.com/cloudera/hadoop-common" target="_blank" rel="noopener">hadoop-common项目</a>），发现并没有对空指针异常做处理的代码。</li>
+<li>查看<a href="https://issues.apache.org/jira/secure/attachment/12785614/HDFS-9406.branch-2.7.patch" target="_blank" rel="noopener">patch</a>，实际上也只是让删除快照变得正常，但是对已经出问题的fsimage没有做好兼容。<br><img src="https://leanote.com/api/file/getImage?fileId=58971ff7ab64413f920015d1" alt="patch关键位置"></li>
+<li><p>针对<a href="https://github.com/cloudera/hadoop-common/tree/cdh5.7.5-release" target="_blank" rel="noopener">CDH5.7.5-release</a>，尝试修改代码，在Namenode启动时忽略Null 的INode，主要改动如下<br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166c" alt=""><br> 编译替换后发现了新的异常：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">2017-02-04 15:41:08,581 ERROR org.apache.hadoop.hdfs.server.namenode.FSImage: Failed to load image from FSImageFile(file=/data/dfs/nn/current/fsimage_0000000005899107393, cpktTxId=0000000005899107393)</span><br><span class="line">java.io.IOException: Cannot find an INode associated with the INode FlumeData.1482923297645 in created list while loading FSImage.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.SnapshotFSImageFormat.loadCreated(SnapshotFSImageFormat.java:158)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadCreatedList(FSImageFormatPBSnapshot.java:244)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadDirectoryDiffList(FSImageFormatPBSnapshot.java:338)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadSnapshotDiffSection(FSImageFormatPBSnapshot.java:189)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.loadInternal(FSImageFormatProtobuf.java:271)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.load(FSImageFormatProtobuf.java:181)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormat$LoaderDelegator.load(FSImageFormat.java:226)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:948)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:932)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImageFile(FSImage.java:751)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:682)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,657 WARN org.apache.hadoop.hdfs.server.namenode.FSNamesystem: Encountered exception loading fsimage</span><br><span class="line">java.io.IOException: Failed to load FSImage file, see error(s) above for more info.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:697)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,660 INFO org.mortbay.log: Stopped HttpServer2$SelectChannelConnectorWithSafeStartup@0.0.0.0:50070</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: Stopping NameNode metrics system...</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: NameNode metrics system stopped.</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: NameNode metrics system shutdown complete.</span><br><span class="line">2017-02-04 15:41:08,762 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode: Failed to start namenode.</span><br><span class="line">java.io.IOException: Failed to load FSImage file, see error(s) above for more info.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:697)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,764 INFO org.apache.hadoop.util.ExitUtil: Exiting with status 1</span><br><span class="line">2017-02-04 15:41:08,765 INFO org.apache.hadoop.hdfs.server.namenode.NameNode: SHUTDOWN_MSG:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据提示，继续修改代码<br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166b" alt=""><br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166d" alt=""></p>
+</li>
+<li><p>重新编译修改后的代码，采用的Java版本为<a href="http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.7.5/RPMS/x86_64/oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.7.5/RPMS/x86_64/oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm</a>，编译前需要安装protobuf-2.5.0和protobuf-compile-2.5.0，编译指令为</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn package -Pdist -DskipTests -Dtar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>替换集群NameNode和SecondaryNamenode 下的 /opt/cloudera/parcels/CDH/jars/hadoop-hdfs-2.6.0-cdh5.7.5.jar 为上面编译后的 hadoop-common-cdh5.7.5-release/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.6.0-cdh5.7.5.jar </p>
+</li>
+<li>启动NameNode 成功<h2 id="修复总结"><a href="#修复总结" class="headerlink" title="修复总结"></a>修复总结</h2></li>
+<li>目前暂时通过忽略空节点的方式来绕过fsimage的问题，但是由于对hadoop了解还不够深入，不确定会不会引入新的问题，建议最好启动后备份数据，然后重整集群再恢复。</li>
+<li>备份一定要做好，开源的方案有可能存在bug，导致各种问题。要做到无法何种故障，都有恢复的手段。</li>
+</ol>
+<blockquote>
+<p>最后重点感谢公司强大的大佬和强大运维支持。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/05/namenode-start-failed-for-snapshot/" data-id="cjfdarv8600079kql025uxfd2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-single-node-zookeeper" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/31/install-single-node-zookeeper/" class="article-date">
+  <time datetime="2016-08-31T02:15:22.000Z" itemprop="datePublished">2016-08-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 下载</span><br><span class="line">cd /opt</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz</span><br><span class="line">tar -axvf  zookeeper-3.4.8.tar.gz</span><br><span class="line">cd zookeeper-3.4.8</span><br><span class="line"></span><br><span class="line"># 环境变量</span><br><span class="line">cat &gt;&gt; ~/.bashrc &lt;&lt;EOF</span><br><span class="line">##########    ZOOKEEPER  ####################</span><br><span class="line">export ZOOKEEPER_HOME=/opt/zookeeper-3.4.8</span><br><span class="line">export PATH=\$PATH:\$ZOOKEEPER_HOME/bin</span><br><span class="line">export CLASSPATH=\$CLASSPATH:\$ZOOKEEPER_HOME/lib/*</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"># 使环境变量生效</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 配置</span><br><span class="line">cp $ZOOKEEPER_HOME/conf/zoo_sample.cfg $ZOOKEEPER_HOME/conf/zoo.cfg</span><br><span class="line"># 修改zoo.cfg的datadir配置为</span><br><span class="line">dataDir=/data/var/lib/zookeeper</span><br></pre></td></tr></table></figure>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 启动</span><br><span class="line">$ZOOKEEPER_HOME/bin/zkServer.sh start</span><br><span class="line"># 关闭</span><br><span class="line">$ZOOKEEPER_HOME/bin/zkServer.sh stop</span><br></pre></td></tr></table></figure>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://zookeeper.apache.org/doc/r3.4.8/" target="_blank" rel="noopener">https://zookeeper.apache.org/doc/r3.4.8/</a></li>
+<li><a href="https://zookeeper.apache.org/doc/r3.4.8/zookeeperStarted.html" target="_blank" rel="noopener">https://zookeeper.apache.org/doc/r3.4.8/zookeeperStarted.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/31/install-single-node-zookeeper/" data-id="cjfdarv8c00099kql8y6a9ba2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-openresty-on-centos6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/11/install-openresty-on-centos6/" class="article-date">
+  <time datetime="2016-08-11T00:53:41.000Z" itemprop="datePublished">2016-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/11/install-openresty-on-centos6/">CentOS6 下安装openresty</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><ul>
+<li><p>安装依赖库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y readline-devel pcre-devel openssl-devel gcc postgresql-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载<br>从<a href="https://openresty.org/cn/download.html" target="_blank" rel="noopener">https://openresty.org/cn/download.html</a>下载一个发行版</p>
+</li>
+<li><p>解压安装到/opt/openresty下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tar xzvf ngx_openresty-VERSION.tar.gz</span><br><span class="line"><span class="built_in">cd</span> ngx_openresty-VERSION/</span><br><span class="line">./configure --prefix=/opt/openresty \</span><br><span class="line">            --with-luajit \</span><br><span class="line">            --without-http_redis2_module \</span><br><span class="line">            --with-http_iconv_module \</span><br><span class="line">            --with-http_postgres_module</span><br><span class="line">make -j8</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; ~/.bashrc &lt;&lt;EOF</span><br><span class="line"><span class="comment">######## openresty #########</span></span><br><span class="line"><span class="built_in">export</span> OPENRESTY_HOME=/opt/openresty</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$PATH</span>:\<span class="variable">$OPENRESTY_HOME</span>/bin</span><br><span class="line"><span class="built_in">export</span> NGINX_HOME=\<span class="variable">$OPENRESTY_HOME</span>/nginx</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$PATH</span>:\<span class="variable">$NGINX_HOME</span>/sbin</span><br><span class="line"><span class="built_in">export</span> LUAJIT_HOME=\<span class="variable">$OPENRESTY_HOME</span>/luajit</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$LUAJIT_HOME</span>/bin:\<span class="variable">$PATH</span></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>openresty: <a href="https://openresty.org/cn/" target="_blank" rel="noopener">https://openresty.org/cn/</a></li>
+<li>openresty安装：<a href="https://openresty.org/cn/installation.html" target="_blank" rel="noopener">https://openresty.org/cn/installation.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/11/install-openresty-on-centos6/" data-id="cjfdarv7x00059kql5x9mtgim" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-apache-https-setting" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/05/apache-https-setting/" class="article-date">
+  <time datetime="2016-05-05T08:39:30.000Z" itemprop="datePublished">2016-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/05/apache-https-setting/">apache 的HTTPS设置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="配置Apache的HTTP支持"><a href="#配置Apache的HTTP支持" class="headerlink" title="配置Apache的HTTP支持"></a>配置Apache的HTTP支持</h2><ul>
+<li><p>创建并切换到ssl目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /etc/httpd/ssl</span><br><span class="line">chmod 600 /etc/httpd/ssl</span><br><span class="line">cd /etc/httpd/ssl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成证书和密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 建立服务器密钥</span><br><span class="line">openssl genrsa -out server.key 1024</span><br><span class="line"># 建立服务器公钥 </span><br><span class="line">openssl req -new -key server.key -out server.csr</span><br><span class="line"># 建立服务器证书 </span><br><span class="line">openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改/etc/httpd/conf.d/ssl.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Listen Server_FQDN:443</span><br><span class="line">SSLEngine on</span><br><span class="line">SSLCertificateKeyFile /etc/httpd/ssl/server.key</span><br><span class="line">SSLCertificateFile /etc/httpd/ssl/server.crt</span><br><span class="line">SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">SSLCipherSuite ALL:-ADH:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<li><a href="http://httpd.apache.org/docs/2.2/" target="_blank" rel="noopener">http://httpd.apache.org/docs/2.2/</a></li>
+<li><a href="http://security-24-7.com/how-to-implement-ssl-on-apache-2-2-15/" target="_blank" rel="noopener">http://security-24-7.com/how-to-implement-ssl-on-apache-2-2-15/</a></li>
+<li><a href="http://www.thinksaas.cn/topics/0/280/280017.html" target="_blank" rel="noopener">http://www.thinksaas.cn/topics/0/280/280017.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/05/05/apache-https-setting/" data-id="cjfdarv6g00009kql4cc9jfwx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-cloudera-5.7.0-mirror" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/04/install-cloudera-5.7.0-mirror/" class="article-date">
+  <time datetime="2016-05-04T11:34:53.000Z" itemprop="datePublished">2016-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/04/install-cloudera-5.7.0-mirror/">安装Cloudera 5.7.0镜像</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="镜像包含"><a href="#镜像包含" class="headerlink" title="镜像包含"></a>镜像包含</h2><ul>
+<li>CM5</li>
+<li>CDH5</li>
+</ul>
+<h2 id="安装Apache-HTTP-server"><a href="#安装Apache-HTTP-server" class="headerlink" title="安装Apache HTTP server"></a>安装Apache HTTP server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd</span><br><span class="line"># 查看版本</span><br><span class="line">httpd -v</span><br><span class="line"># Server version: Apache/2.2.15 (Unix)</span><br><span class="line"># Server built:   Mar 22 2016 19:03:53</span><br></pre></td></tr></table></figure>
+<h2 id="ssl相关模块"><a href="#ssl相关模块" class="headerlink" title="ssl相关模块"></a>ssl相关模块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y openssl mod_ssl</span><br></pre></td></tr></table></figure>
+<h2 id="启动http服务器"><a href="#启动http服务器" class="headerlink" title="启动http服务器"></a>启动http服务器</h2><p><strong>注意：</strong>这里暂时忽略证书<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service httpd start</span><br></pre></td></tr></table></figure></p>
+<h2 id="CM与CDH"><a href="#CM与CDH" class="headerlink" title="CM与CDH"></a>CM与CDH</h2><p><strong>CM 地址</strong></p>
+<p><a href="https://archive.cloudera.com/cm5/repo-as-tarball" target="_blank" rel="noopener">cm5</a>  <a href="http://archive.cloudera.com/cm5/repo-as-tarball/5.7.0/" target="_blank" rel="noopener">5.7.0</a></p>
+<p><strong>CDH 地址</strong><br><a href="http://archive.cloudera.com/cm5/repo-as-tarball/" target="_blank" rel="noopener">CDH5 rpm形式</a>  <a href="http://archive.cloudera.com/cdh5/repo-as-tarball/5.7.0/" target="_blank" rel="noopener">5.7.0</a><br><a href="http://archive.cloudera.com/cdh5/parcels/5.7.0/" target="_blank" rel="noopener">CDH5 parcel</a></p>
+<p><strong>下载</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/repo-as-tarball/5.7.0/cm5.7.0-centos6.tar.gz</span><br><span class="line">wget http://archive.cloudera.com/cdh5/repo-as-tarball/5.7.0/cdh5.7.0-centos6.tar.gz</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/CDH-5.7.0-1.cdh5.7.0.p0.45-el5.parcel.sha1</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/manifest.json</span><br></pre></td></tr></table></figure></p>
+<p><strong>解压</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># CM</span><br><span class="line">mkdir -p /var/www/html/cm5/redhat/6/x86_64</span><br><span class="line">tar xvfz cm5.7.0-centos6.tar.gz -C /var/www/html/cm5/redhat/6/x86_64</span><br><span class="line"># CDH</span><br><span class="line">mkdir -p /var/www/html/cdh5</span><br><span class="line">tar xvfz cdh5.7.0-centos6.tar.gz -C /var/www/html/cdh5</span><br><span class="line">mkdir -p /var/www/html/cdh5/parcels/5.7.0/</span><br><span class="line">cp CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel.sha1  manifest.json /var/www/html/cdh5/parcels/5.7.0/</span><br><span class="line">cd /var/www/html/cdh5/parcels/</span><br><span class="line">ln -s 5.7.0 5.7</span><br><span class="line">ln -s 5.7.0 5</span><br><span class="line">ln -s 5.7.0 latest</span><br></pre></td></tr></table></figure></p>
+<p><strong>其他文件</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># CM5</span><br><span class="line">CM5_DIR=/var/www/html/cm5</span><br><span class="line"># CM5 installer</span><br><span class="line">cd $CM5_DIR</span><br><span class="line">wget http://archive.cloudera.com/cm5/installer/5.7.0/cloudera-manager-installer.bin -P installer/5.7.0</span><br><span class="line">cd $CM5_DIR/installer</span><br><span class="line">ln -s 5.7.0 latest</span><br><span class="line"></span><br><span class="line"># redhat</span><br><span class="line">REDHAT_DIR=/var/www/html/redhat</span><br><span class="line">mkdir $REDHAT_DIR</span><br><span class="line">cd $REDHAT_DIR</span><br><span class="line"></span><br><span class="line">wget http://archive.cloudera.com/redhat/cdh/RPM-GPG-KEY-cloudera -P cdh/</span><br><span class="line">## 或者</span><br><span class="line">ln -s $PWD/../cdh5/redhat/6/x86_64/cdh .</span><br></pre></td></tr></table></figure></p>
+<p><strong>权限</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R ugo+rX /var/www/html/cdh</span><br></pre></td></tr></table></figure></p>
+<h2 id="其他机器访问"><a href="#其他机器访问" class="headerlink" title="其他机器访问"></a>其他机器访问</h2><p>在其他机器添加yum 仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat /etc/yum.repos.d/cloudera.repo</span><br><span class="line">[cloudera]</span><br><span class="line">name=cloudera</span><br><span class="line">baseurl=http://hostname/cm5/redhat/6/x86_64/cm/5</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_create_local_package_repo.html#cmig_topic_21_3" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_create_local_package_repo.html#cmig_topic_21_3</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/05/04/install-cloudera-5.7.0-mirror/" data-id="cjfdarv7200039kql0z9g2blj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-cdh-5.7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/04/install-cdh-5.7/" class="article-date">
+  <time datetime="2016-05-04T09:54:01.000Z" itemprop="datePublished">2016-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/04/install-cdh-5.7/">CDH 5.7 安装</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="搭建镜像"><a href="#搭建镜像" class="headerlink" title="搭建镜像"></a>搭建镜像</h2><p>安装位置：192.168.8.209<br>参考:<a href="http://yychildren.leanote.com/post/安装Cloudera-5.7.0镜像/" target="_blank" rel="noopener">http://yychildren.leanote.com/post/安装Cloudera-5.7.0镜像/</a></p>
+<h2 id="准备三台机器"><a href="#准备三台机器" class="headerlink" title="准备三台机器"></a>准备三台机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ycj1.mingchao.com</span><br><span class="line">ycj2.mingchao.com</span><br><span class="line">ycj3.mingchao.com</span><br></pre></td></tr></table></figure>
+<h2 id="安装基本软件"><a href="#安装基本软件" class="headerlink" title="安装基本软件"></a>安装基本软件</h2><h3 id="安装yum库"><a href="#安装yum库" class="headerlink" title="安装yum库"></a>安装yum库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>163的yum库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.163.com/.help/CentOS6-Base-163.repo -P /etc/yum.repos.d</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>epel库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="基本软件"><a href="#基本软件" class="headerlink" title="基本软件"></a>基本软件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim lrzsz python openssh openssh-clients</span><br><span class="line"># vim</span><br><span class="line"># lrzsz</span><br><span class="line"># python 2.6/2.7</span><br><span class="line"># openssh</span><br><span class="line"># openssh-clients</span><br></pre></td></tr></table></figure>
+<h2 id="host-设置"><a href="#host-设置" class="headerlink" title="host 设置"></a>host 设置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 你的镜像服务器，参考&quot;安装Cloudera 5.7.0镜像&quot;</span><br><span class="line">192.168.8.209 archive.cloudera.com</span><br><span class="line"></span><br><span class="line">192.168.116.21 ycj1.mingchao.com</span><br><span class="line">192.168.116.22 ycj2.mingchao.com</span><br><span class="line">192.168.116.23 ycj3.mingchao.com</span><br></pre></td></tr></table></figure>
+<h2 id="生成ssh密钥对"><a href="#生成ssh密钥对" class="headerlink" title="生成ssh密钥对"></a>生成ssh密钥对</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
+<h2 id="添加公钥"><a href="#添加公钥" class="headerlink" title="添加公钥"></a>添加公钥</h2><p>ycj1.mingchao.com上做<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id ycj1.mingchao.com</span><br><span class="line">ssh-copy-id ycj2.mingchao.com</span><br><span class="line">ssh-copy-id ycj3.mingchao.com</span><br></pre></td></tr></table></figure></p>
+<h2 id="禁用selinux"><a href="#禁用selinux" class="headerlink" title="禁用selinux"></a>禁用selinux</h2><p><strong>参考：</strong><a href="http://www.thegeekstuff.com/2009/06/how-to-disable-selinux-redhat-fedora-debian-unix/" target="_blank" rel="noopener">http://www.thegeekstuff.com/2009/06/how-to-disable-selinux-redhat-fedora-debian-unix/</a><br><strong>永久</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/selinux/config</span><br><span class="line">## 之后重启电脑</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># This file controls the state of SELinux on the system.</span><br><span class="line"># SELINUX= can take one of these three values:</span><br><span class="line">#       enforcing - SELinux security policy is enforced.</span><br><span class="line">#       permissive - SELinux prints warnings instead of enforcing.</span><br><span class="line">#       disabled - No SELinux policy is loaded.</span><br><span class="line">SELINUX=disabled</span><br><span class="line"># SELINUXTYPE= can take one of these two values:</span><br><span class="line">#       targeted - Targeted processes are protected,</span><br><span class="line">#       mls - Multi Level Security protection.</span><br><span class="line">SELINUXTYPE=targeted</span><br></pre></td></tr></table></figure>
+<p><strong>临时</strong>（没成功）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo 0 &gt; /selinux/enforce</span><br><span class="line">## or</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看selinux状态</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getenforce</span><br><span class="line"># Disabled</span><br></pre></td></tr></table></figure></p>
+<h2 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h2><p><strong>永久（需重启）</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig iptables off</span><br></pre></td></tr></table></figure></p>
+<p><strong>临时</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop</span><br></pre></td></tr></table></figure></p>
+<h2 id="yum-不检验ssl"><a href="#yum-不检验ssl" class="headerlink" title="yum 不检验ssl"></a>yum 不检验ssl</h2><p><strong>原因是5.7.0的访问以https的形式</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 在/etc/yum.conf 下添加</span><br><span class="line">sslverify=false</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装Cloudera-manager"><a href="#安装Cloudera-manager" class="headerlink" title="安装Cloudera manager"></a>安装Cloudera manager</h2><p><strong>ycj1.mingchao.com上做</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/installer/5.7.0/cloudera-manager-installer.bin</span><br><span class="line">chmod u+x cloudera-manager-installer.bin</span><br><span class="line"># 从Internet安装</span><br><span class="line">sudo ./cloudera-manager-installer.bin</span><br><span class="line"># 从本地库安装 （这里不采用）</span><br><span class="line">sudo ./cloudera-manager-installer.bin --skip_repo_package=1</span><br></pre></td></tr></table></figure></p>
+<p><strong>安装完后等待，直到</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat -anp | grep 7180</span><br><span class="line"># tcp        0      0 0.0.0.0:7180</span><br><span class="line"># 0.0.0.0:*                   LISTEN      1676/java</span><br></pre></td></tr></table></figure></p>
+<h2 id="cloudera-manager"><a href="#cloudera-manager" class="headerlink" title="cloudera-manager"></a>cloudera-manager</h2><h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p>链接：<a href="http://192.168.116.21:7180/" target="_blank" rel="noopener">http://192.168.116.21:7180/</a><br>账号：admin<br>密码：admin</p>
+<h3 id="下一步到"><a href="#下一步到" class="headerlink" title="下一步到"></a>下一步到</h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000437" alt=""></p>
+<hr>
+<p><strong>可以选择使用数据包或者使用Parcel</strong><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043f" alt=""></p>
+<hr>
+<p><strong>使用以下搜索主机：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ycj[1-3].mingchao.com</span><br></pre></td></tr></table></figure></p>
+<h3 id="继续–安装JDK"><a href="#继续–安装JDK" class="headerlink" title="继续–安装JDK"></a><strong>继续–安装JDK</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e3000447" alt=""></p>
+<hr>
+<p>选定：<br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e300044d" alt=""></p>
+<h3 id="继续–SSH登录凭据"><a href="#继续–SSH登录凭据" class="headerlink" title="继续–SSH登录凭据"></a><strong>继续–SSH登录凭据</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000439" alt=""></p>
+<hr>
+<p>选择：<br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000435" alt=""></p>
+<hr>
+<p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000443" alt=""></p>
+<h3 id="继续–等待安装"><a href="#继续–等待安装" class="headerlink" title="继续–等待安装"></a><strong>继续–等待安装</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000433" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000431" alt=""></p>
+<h2 id="权限问题解决"><a href="#权限问题解决" class="headerlink" title="权限问题解决"></a>权限问题解决</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hdfs hadoop fs -chmod 777  /</span><br><span class="line">sudo -u hdfs hadoop fs -mkdir -p /user/spark/applicationHistory</span><br><span class="line">sudo -u hdfs hadoop fs -chown -R spark /user/spark</span><br><span class="line">sudo -u hdfs hadoop fs -chmod 1777 /user/spark/applicationHistory</span><br></pre></td></tr></table></figure>
+<h3 id="安装完成"><a href="#安装完成" class="headerlink" title="安装完成"></a>安装完成</h3><h2 id="证书问题"><a href="#证书问题" class="headerlink" title="证书问题"></a>证书问题</h2><blockquote>
+<h4 id="报错："><a href="#报错：" class="headerlink" title="报错："></a><strong>报错：</strong></h4><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043b" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e3000449" alt=""></p>
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a><strong>原因</strong></h4><p>没有cloudera的证书</p>
+<h4 id="解决"><a href="#解决" class="headerlink" title="解决"></a><strong>解决</strong></h4><ul>
+<li>中止安装</li>
+<li>yum 不验证ssl<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;# 在/etc/yum.conf 下添加</span><br><span class="line">&gt;sslverify=false</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>卸载失败的主机</li>
+<li>重试失败的主机<h4 id="添加证书"><a href="#添加证书" class="headerlink" title="添加证书"></a><strong>添加证书</strong></h4>但在CentOS 6下无效的方法，已经被确定为CentOS的bug：<a href="https://www.centos.org/forums/viewtopic.php?t=1073" target="_blank" rel="noopener">https://www.centos.org/forums/viewtopic.php?t=1073</a><br><strong>更新ca-certificates</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;yum --disablerepo=cloudera-manager -y update ca-certificates</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>导出cloudera的证书为cloudera.cer</strong><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000445" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000441" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043d" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e300044b" alt=""><br><strong>导入证书</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">转换格式 .cer 到 .pem</span><br><span class="line">openssl x509 -inform der -in cloudera.cer  -out cloudera.pem</span><br><span class="line">追加到信任列表</span><br><span class="line">cat cloudera.pem &gt;&gt; /etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_install_path_a.html#cmig_topic_6_5" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_install_path_a.html#cmig_topic_6_5</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/05/04/install-cdh-5.7/" data-id="cjfdarv7000029kql7k4k0qcy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-program-in-my-eyes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/24/program-in-my-eyes/" class="article-date">
+  <time datetime="2016-04-24T15:29:58.000Z" itemprop="datePublished">2016-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/24/program-in-my-eyes/">我眼中的程序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>随着程序越写越多，接触的语言逐渐广泛，开始思考程序到底是什么，怎样编写程序。以下是个人的一些理解，并非权威定义，欢迎探讨与批判。</p>
+<h2 id="通常介绍"><a href="#通常介绍" class="headerlink" title="通常介绍"></a>通常介绍</h2><p><strong>尼古拉斯·沃斯</strong> ：<strong>算法+数据结构=程序</strong></p>
+<h2 id="我的理解"><a href="#我的理解" class="headerlink" title="我的理解"></a>我的理解</h2><p><strong>算法</strong>：对于0个或多个输入数据进行一系列有限步骤之后得出1个或以上的输出结果。本质上是一个<strong>行为说明书</strong>。<br><strong>数据结构</strong>：对数据以及数据之间的关联关系的描述。本质上就是<strong>数据</strong>。<br><strong>程序</strong>：通过上面的理解，可以认为<code>程序=数据+行为</code></p>
+<ul>
+<li>这样说或许比较抽象，可以参考一个例子：</li>
+<li>我从商场买了回来一个吊扇，现在我要把她装到我的床上：</li>
+<li>那么：</li>
+<li><strong>数据</strong>：里面的螺丝、扇翼等基本配件可以认为是数据。</li>
+<li><strong>行为</strong>：介绍如可安装电风扇的说明说就是行为。</li>
+</ul>
+<h2 id="程序在编程语言上的体现"><a href="#程序在编程语言上的体现" class="headerlink" title="程序在编程语言上的体现"></a>程序在编程语言上的体现</h2><p><strong>编程语言</strong>大致可以分为三种：</p>
+<hr>
+<ul>
+<li>面向过程：</li>
+</ul>
+<ol>
+<li>对于一个问题，详细描述解决问题的过程。</li>
+<li>典型代表，C语言</li>
+</ol>
+<ul>
+<li>面向对象：</li>
+</ul>
+<ol>
+<li>重在数据，通过封装将数据抽象化，将方法应用于特定抽象化数据。</li>
+<li>工业界主流，C++、Java、Python等</li>
+</ol>
+<ul>
+<li>函数式编程：</li>
+</ul>
+<ol>
+<li>重在行为，将行为定义成函数，函数可作为参数传递以及作为返回值返回。</li>
+<li>schema、erlang、scala等。</li>
+</ol>
+<hr>
+<p>可以看到实际上面向对象实际上将重点放在数据的组织上，让程序看起来就像是现实世界上不同个体与整体的映射。<br>而函数式编程这是重在行为，意看起来是将现实中的种种方法步骤以函数作为载体映射到程序里。<br>至于面向过程，我使用较少，不做评论。</p>
+<hr>
+<p>那么有没有数据和行为都重点关注的语言呢？<br>有的，如</p>
+<ul>
+<li>python：面向对象语言，把一切看做对象，函数也是对象。 </li>
+<li>scala：函数式编程语言，运行于Java虚拟机。虽然推崇函数式编程，但也提供了对象的封装。</li>
+</ul>
+<h2 id="编程语言的两个极端"><a href="#编程语言的两个极端" class="headerlink" title="编程语言的两个极端"></a>编程语言的两个极端</h2><ul>
+<li>Lisp：计算的需求，也就是行为的体现。</li>
+<li>C：抽象的需求，也就是数据的体现。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/24/program-in-my-eyes/" data-id="cjfdarv8400069kqloc1pdv5i" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 YYChildren<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

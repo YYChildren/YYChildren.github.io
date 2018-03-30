@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CentOS6 下安装openresty | YYChildren&#39;s Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="安装过程 安装依赖库 1yum install -y readline-devel pcre-devel openssl-devel gcc postgresql-devel  下载从https://openresty.org/cn/download.html下载一个发行版  解压安装到/opt/openresty下 123456789tar xzvf ngx_openresty-VERSION.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS6 下安装openresty">
+<meta property="og:url" content="http://yoursite.com/2016/08/11/install-openresty-on-centos6/index.html">
+<meta property="og:site_name" content="YYChildren&#39;s Garden">
+<meta property="og:description" content="安装过程 安装依赖库 1yum install -y readline-devel pcre-devel openssl-devel gcc postgresql-devel  下载从https://openresty.org/cn/download.html下载一个发行版  解压安装到/opt/openresty下 123456789tar xzvf ngx_openresty-VERSION.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-30T01:54:47.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS6 下安装openresty">
+<meta name="twitter:description" content="安装过程 安装依赖库 1yum install -y readline-devel pcre-devel openssl-devel gcc postgresql-devel  下载从https://openresty.org/cn/download.html下载一个发行版  解压安装到/opt/openresty下 123456789tar xzvf ngx_openresty-VERSION.">
+  
+    <link rel="alternate" href="/atom.xml" title="YYChildren&#39;s Garden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YYChildren&#39;s Garden</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">杯水长情</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-install-openresty-on-centos6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/11/install-openresty-on-centos6/" class="article-date">
+  <time datetime="2016-08-11T00:53:41.000Z" itemprop="datePublished">2016-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CentOS6 下安装openresty
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><ul>
+<li><p>安装依赖库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y readline-devel pcre-devel openssl-devel gcc postgresql-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载<br>从<a href="https://openresty.org/cn/download.html" target="_blank" rel="noopener">https://openresty.org/cn/download.html</a>下载一个发行版</p>
+</li>
+<li><p>解压安装到/opt/openresty下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tar xzvf ngx_openresty-VERSION.tar.gz</span><br><span class="line"><span class="built_in">cd</span> ngx_openresty-VERSION/</span><br><span class="line">./configure --prefix=/opt/openresty \</span><br><span class="line">            --with-luajit \</span><br><span class="line">            --without-http_redis2_module \</span><br><span class="line">            --with-http_iconv_module \</span><br><span class="line">            --with-http_postgres_module</span><br><span class="line">make -j8</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; ~/.bashrc &lt;&lt;EOF</span><br><span class="line"><span class="comment">######## openresty #########</span></span><br><span class="line"><span class="built_in">export</span> OPENRESTY_HOME=/opt/openresty</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$PATH</span>:\<span class="variable">$OPENRESTY_HOME</span>/bin</span><br><span class="line"><span class="built_in">export</span> NGINX_HOME=\<span class="variable">$OPENRESTY_HOME</span>/nginx</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$PATH</span>:\<span class="variable">$NGINX_HOME</span>/sbin</span><br><span class="line"><span class="built_in">export</span> LUAJIT_HOME=\<span class="variable">$OPENRESTY_HOME</span>/luajit</span><br><span class="line"><span class="built_in">export</span> PATH=\<span class="variable">$LUAJIT_HOME</span>/bin:\<span class="variable">$PATH</span></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>openresty: <a href="https://openresty.org/cn/" target="_blank" rel="noopener">https://openresty.org/cn/</a></li>
+<li>openresty安装：<a href="https://openresty.org/cn/installation.html" target="_blank" rel="noopener">https://openresty.org/cn/installation.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/11/install-openresty-on-centos6/" data-id="cjfdarv7x00059kql5x9mtgim" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/31/install-single-node-zookeeper/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          单节点 zookeeper 安装
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/05/apache-https-setting/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">apache 的HTTPS设置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 YYChildren<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>安装Cloudera 5.7.0镜像 | YYChildren&#39;s Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="镜像包含 CM5 CDH5  安装Apache HTTP server12345yum install httpd# 查看版本httpd -v# Server version: Apache/2.2.15 (Unix)# Server built:   Mar 22 2016 19:03:53 ssl相关模块1yum install -y openssl mod_ssl 启动http服务器注意：这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装Cloudera 5.7.0镜像">
+<meta property="og:url" content="http://yoursite.com/2016/05/04/install-cloudera-5.7.0-mirror/index.html">
+<meta property="og:site_name" content="YYChildren&#39;s Garden">
+<meta property="og:description" content="镜像包含 CM5 CDH5  安装Apache HTTP server12345yum install httpd# 查看版本httpd -v# Server version: Apache/2.2.15 (Unix)# Server built:   Mar 22 2016 19:03:53 ssl相关模块1yum install -y openssl mod_ssl 启动http服务器注意：这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-30T01:54:47.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装Cloudera 5.7.0镜像">
+<meta name="twitter:description" content="镜像包含 CM5 CDH5  安装Apache HTTP server12345yum install httpd# 查看版本httpd -v# Server version: Apache/2.2.15 (Unix)# Server built:   Mar 22 2016 19:03:53 ssl相关模块1yum install -y openssl mod_ssl 启动http服务器注意：这">
+  
+    <link rel="alternate" href="/atom.xml" title="YYChildren&#39;s Garden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YYChildren&#39;s Garden</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">杯水长情</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-install-cloudera-5.7.0-mirror" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/04/install-cloudera-5.7.0-mirror/" class="article-date">
+  <time datetime="2016-05-04T11:34:53.000Z" itemprop="datePublished">2016-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      安装Cloudera 5.7.0镜像
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="镜像包含"><a href="#镜像包含" class="headerlink" title="镜像包含"></a>镜像包含</h2><ul>
+<li>CM5</li>
+<li>CDH5</li>
+</ul>
+<h2 id="安装Apache-HTTP-server"><a href="#安装Apache-HTTP-server" class="headerlink" title="安装Apache HTTP server"></a>安装Apache HTTP server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd</span><br><span class="line"># 查看版本</span><br><span class="line">httpd -v</span><br><span class="line"># Server version: Apache/2.2.15 (Unix)</span><br><span class="line"># Server built:   Mar 22 2016 19:03:53</span><br></pre></td></tr></table></figure>
+<h2 id="ssl相关模块"><a href="#ssl相关模块" class="headerlink" title="ssl相关模块"></a>ssl相关模块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y openssl mod_ssl</span><br></pre></td></tr></table></figure>
+<h2 id="启动http服务器"><a href="#启动http服务器" class="headerlink" title="启动http服务器"></a>启动http服务器</h2><p><strong>注意：</strong>这里暂时忽略证书<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service httpd start</span><br></pre></td></tr></table></figure></p>
+<h2 id="CM与CDH"><a href="#CM与CDH" class="headerlink" title="CM与CDH"></a>CM与CDH</h2><p><strong>CM 地址</strong></p>
+<p><a href="https://archive.cloudera.com/cm5/repo-as-tarball" target="_blank" rel="noopener">cm5</a>  <a href="http://archive.cloudera.com/cm5/repo-as-tarball/5.7.0/" target="_blank" rel="noopener">5.7.0</a></p>
+<p><strong>CDH 地址</strong><br><a href="http://archive.cloudera.com/cm5/repo-as-tarball/" target="_blank" rel="noopener">CDH5 rpm形式</a>  <a href="http://archive.cloudera.com/cdh5/repo-as-tarball/5.7.0/" target="_blank" rel="noopener">5.7.0</a><br><a href="http://archive.cloudera.com/cdh5/parcels/5.7.0/" target="_blank" rel="noopener">CDH5 parcel</a></p>
+<p><strong>下载</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/repo-as-tarball/5.7.0/cm5.7.0-centos6.tar.gz</span><br><span class="line">wget http://archive.cloudera.com/cdh5/repo-as-tarball/5.7.0/cdh5.7.0-centos6.tar.gz</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/CDH-5.7.0-1.cdh5.7.0.p0.45-el5.parcel.sha1</span><br><span class="line">wget http://archive.cloudera.com/cdh5/parcels/5.7.0/manifest.json</span><br></pre></td></tr></table></figure></p>
+<p><strong>解压</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># CM</span><br><span class="line">mkdir -p /var/www/html/cm5/redhat/6/x86_64</span><br><span class="line">tar xvfz cm5.7.0-centos6.tar.gz -C /var/www/html/cm5/redhat/6/x86_64</span><br><span class="line"># CDH</span><br><span class="line">mkdir -p /var/www/html/cdh5</span><br><span class="line">tar xvfz cdh5.7.0-centos6.tar.gz -C /var/www/html/cdh5</span><br><span class="line">mkdir -p /var/www/html/cdh5/parcels/5.7.0/</span><br><span class="line">cp CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel.sha1  manifest.json /var/www/html/cdh5/parcels/5.7.0/</span><br><span class="line">cd /var/www/html/cdh5/parcels/</span><br><span class="line">ln -s 5.7.0 5.7</span><br><span class="line">ln -s 5.7.0 5</span><br><span class="line">ln -s 5.7.0 latest</span><br></pre></td></tr></table></figure></p>
+<p><strong>其他文件</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># CM5</span><br><span class="line">CM5_DIR=/var/www/html/cm5</span><br><span class="line"># CM5 installer</span><br><span class="line">cd $CM5_DIR</span><br><span class="line">wget http://archive.cloudera.com/cm5/installer/5.7.0/cloudera-manager-installer.bin -P installer/5.7.0</span><br><span class="line">cd $CM5_DIR/installer</span><br><span class="line">ln -s 5.7.0 latest</span><br><span class="line"></span><br><span class="line"># redhat</span><br><span class="line">REDHAT_DIR=/var/www/html/redhat</span><br><span class="line">mkdir $REDHAT_DIR</span><br><span class="line">cd $REDHAT_DIR</span><br><span class="line"></span><br><span class="line">wget http://archive.cloudera.com/redhat/cdh/RPM-GPG-KEY-cloudera -P cdh/</span><br><span class="line">## 或者</span><br><span class="line">ln -s $PWD/../cdh5/redhat/6/x86_64/cdh .</span><br></pre></td></tr></table></figure></p>
+<p><strong>权限</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R ugo+rX /var/www/html/cdh</span><br></pre></td></tr></table></figure></p>
+<h2 id="其他机器访问"><a href="#其他机器访问" class="headerlink" title="其他机器访问"></a>其他机器访问</h2><p>在其他机器添加yum 仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat /etc/yum.repos.d/cloudera.repo</span><br><span class="line">[cloudera]</span><br><span class="line">name=cloudera</span><br><span class="line">baseurl=http://hostname/cm5/redhat/6/x86_64/cm/5</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_create_local_package_repo.html#cmig_topic_21_3" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_create_local_package_repo.html#cmig_topic_21_3</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/05/04/install-cloudera-5.7.0-mirror/" data-id="cjfdarv7200039kql0z9g2blj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/05/apache-https-setting/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          apache 的HTTPS设置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/04/install-cdh-5.7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CDH 5.7 安装</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 YYChildren<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

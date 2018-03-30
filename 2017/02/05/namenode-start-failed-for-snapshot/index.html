@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hadoop NameNode 无法启动：删除SnapShot所导致 | YYChildren&#39;s Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="事件回顾2017-02-03 14:14 时看到Hadoop Namenode的swap占用较高，于是尝试重启NameNode以释放Swap。想不到竟然无法启动。 日志如下： 123456789101112131415161718192021222017-02-03 14:15:09,218 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop NameNode 无法启动：删除SnapShot所导致">
+<meta property="og:url" content="http://yoursite.com/2017/02/05/namenode-start-failed-for-snapshot/index.html">
+<meta property="og:site_name" content="YYChildren&#39;s Garden">
+<meta property="og:description" content="事件回顾2017-02-03 14:14 时看到Hadoop Namenode的swap占用较高，于是尝试重启NameNode以释放Swap。想不到竟然无法启动。 日志如下： 123456789101112131415161718192021222017-02-03 14:15:09,218 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=58971ff7ab64413f920015d1">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166c">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166b">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166d">
+<meta property="og:updated_time" content="2018-03-30T01:54:47.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop NameNode 无法启动：删除SnapShot所导致">
+<meta name="twitter:description" content="事件回顾2017-02-03 14:14 时看到Hadoop Namenode的swap占用较高，于是尝试重启NameNode以释放Swap。想不到竟然无法启动。 日志如下： 123456789101112131415161718192021222017-02-03 14:15:09,218 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode">
+<meta name="twitter:image" content="https://leanote.com/api/file/getImage?fileId=58971ff7ab64413f920015d1">
+  
+    <link rel="alternate" href="/atom.xml" title="YYChildren&#39;s Garden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YYChildren&#39;s Garden</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">杯水长情</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-namenode-start-failed-for-snapshot" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/05/namenode-start-failed-for-snapshot/" class="article-date">
+  <time datetime="2017-02-05T12:25:37.000Z" itemprop="datePublished">2017-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hadoop NameNode 无法启动：删除SnapShot所导致
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="事件回顾"><a href="#事件回顾" class="headerlink" title="事件回顾"></a>事件回顾</h2><p>2017-02-03 14:14 时看到Hadoop Namenode的swap占用较高，于是尝试重启NameNode以释放Swap。想不到竟然无法启动。</p>
+<p>日志如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">2017-02-03 14:15:09,218 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode: Failed to start namenode.</span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.INodeDirectory.addChild(INodeDirectory.java:531)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatPBINode$Loader.addToParent(FSImageFormatPBINode.java:252)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatPBINode$Loader.loadINodeDirectorySection(FSImageFormatPBINode.java:202)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.loadInternal(FSImageFormatProtobuf.java:261)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.load(FSImageFormatProtobuf.java:180)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImageFormat$LoaderDelegator.load(FSImageFormat.java:226)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:929)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:913)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImageFile(FSImage.java:732)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:668)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:281)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1061)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:765)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:604)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:663)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:830)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:814)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1507)</span><br><span class="line">    at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1575)</span><br><span class="line">2017-02-03 14:15:09,238 INFO org.apache.hadoop.util.ExitUtil: Exiting with status 1</span><br></pre></td></tr></table></figure>
+<h2 id="Hadoop-版本信息"><a href="#Hadoop-版本信息" class="headerlink" title="Hadoop 版本信息"></a>Hadoop 版本信息</h2><p>我们当时使用的Hadoop版本为CDH5.4.9</p>
+<h2 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h2><ol>
+<li>Google之，得到Apache 官方有提到该Bug<br> 地址：<a href="https://issues.apache.org/jira/browse/HDFS-9406" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/HDFS-9406</a></li>
+<li>另外CDH官方有提到解决该问题的版本<br> 地址：<a href="https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_rn_fixed_in_54.html#fixed_issues_5410" target="_blank" rel="noopener">https://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_rn_fixed_in_54.html#fixed_issues_5410</a></li>
+<li><p>问题解释<br> 当删除一个包含INode的最新记录的快照时，fsimage有可能崩溃，因为更早快照的diff的create-list 和 父亲INodeDirectory的child list没有清理。</p>
+<blockquote>
+<p>When deleting a snapshot that contains the last record of a given INode, the fsimage may become corrupt because the create list of the snapshot diff in the previous snapshot and the child list of the parent INodeDirectory are not cleaned.</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><ol>
+<li>尝试以 2017-02-03 12 时的 fsimage 恢复，发现问题依旧。</li>
+<li>升级CDH 版本到5.4.11，发现问题依旧</li>
+<li>继续升级版本到5.7.5，发现问题依旧</li>
+<li>查看修复版本的关键文件 INodeDirectory.java、FSImageFormatPBINode.java、FSImageFormatProtobuf.java（位于<a href="https://github.com/cloudera/hadoop-common" target="_blank" rel="noopener">hadoop-common项目</a>），发现并没有对空指针异常做处理的代码。</li>
+<li>查看<a href="https://issues.apache.org/jira/secure/attachment/12785614/HDFS-9406.branch-2.7.patch" target="_blank" rel="noopener">patch</a>，实际上也只是让删除快照变得正常，但是对已经出问题的fsimage没有做好兼容。<br><img src="https://leanote.com/api/file/getImage?fileId=58971ff7ab64413f920015d1" alt="patch关键位置"></li>
+<li><p>针对<a href="https://github.com/cloudera/hadoop-common/tree/cdh5.7.5-release" target="_blank" rel="noopener">CDH5.7.5-release</a>，尝试修改代码，在Namenode启动时忽略Null 的INode，主要改动如下<br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166c" alt=""><br> 编译替换后发现了新的异常：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">2017-02-04 15:41:08,581 ERROR org.apache.hadoop.hdfs.server.namenode.FSImage: Failed to load image from FSImageFile(file=/data/dfs/nn/current/fsimage_0000000005899107393, cpktTxId=0000000005899107393)</span><br><span class="line">java.io.IOException: Cannot find an INode associated with the INode FlumeData.1482923297645 in created list while loading FSImage.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.SnapshotFSImageFormat.loadCreated(SnapshotFSImageFormat.java:158)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadCreatedList(FSImageFormatPBSnapshot.java:244)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadDirectoryDiffList(FSImageFormatPBSnapshot.java:338)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.snapshot.FSImageFormatPBSnapshot$Loader.loadSnapshotDiffSection(FSImageFormatPBSnapshot.java:189)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.loadInternal(FSImageFormatProtobuf.java:271)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormatProtobuf$Loader.load(FSImageFormatProtobuf.java:181)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImageFormat$LoaderDelegator.load(FSImageFormat.java:226)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:948)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:932)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImageFile(FSImage.java:751)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:682)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,657 WARN org.apache.hadoop.hdfs.server.namenode.FSNamesystem: Encountered exception loading fsimage</span><br><span class="line">java.io.IOException: Failed to load FSImage file, see error(s) above for more info.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:697)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,660 INFO org.mortbay.log: Stopped HttpServer2$SelectChannelConnectorWithSafeStartup@0.0.0.0:50070</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: Stopping NameNode metrics system...</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: NameNode metrics system stopped.</span><br><span class="line">2017-02-04 15:41:08,761 INFO org.apache.hadoop.metrics2.impl.MetricsSystemImpl: NameNode metrics system shutdown complete.</span><br><span class="line">2017-02-04 15:41:08,762 ERROR org.apache.hadoop.hdfs.server.namenode.NameNode: Failed to start namenode.</span><br><span class="line">java.io.IOException: Failed to load FSImage file, see error(s) above for more info.</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.loadFSImage(FSImage.java:697)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:291)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:1096)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:778)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:609)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:670)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:838)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.&lt;init&gt;(NameNode.java:817)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1537)</span><br><span class="line">        at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1605)</span><br><span class="line">2017-02-04 15:41:08,764 INFO org.apache.hadoop.util.ExitUtil: Exiting with status 1</span><br><span class="line">2017-02-04 15:41:08,765 INFO org.apache.hadoop.hdfs.server.namenode.NameNode: SHUTDOWN_MSG:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据提示，继续修改代码<br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166b" alt=""><br> <img src="https://leanote.com/api/file/getImage?fileId=58972421ab64413b8000166d" alt=""></p>
+</li>
+<li><p>重新编译修改后的代码，采用的Java版本为<a href="http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.7.5/RPMS/x86_64/oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm" target="_blank" rel="noopener">http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.7.5/RPMS/x86_64/oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm</a>，编译前需要安装protobuf-2.5.0和protobuf-compile-2.5.0，编译指令为</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn package -Pdist -DskipTests -Dtar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>替换集群NameNode和SecondaryNamenode 下的 /opt/cloudera/parcels/CDH/jars/hadoop-hdfs-2.6.0-cdh5.7.5.jar 为上面编译后的 hadoop-common-cdh5.7.5-release/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.6.0-cdh5.7.5.jar </p>
+</li>
+<li>启动NameNode 成功<h2 id="修复总结"><a href="#修复总结" class="headerlink" title="修复总结"></a>修复总结</h2></li>
+<li>目前暂时通过忽略空节点的方式来绕过fsimage的问题，但是由于对hadoop了解还不够深入，不确定会不会引入新的问题，建议最好启动后备份数据，然后重整集群再恢复。</li>
+<li>备份一定要做好，开源的方案有可能存在bug，导致各种问题。要做到无法何种故障，都有恢复的手段。</li>
+</ol>
+<blockquote>
+<p>最后重点感谢公司强大的大佬和强大运维支持。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/05/namenode-start-failed-for-snapshot/" data-id="cjfdarv8600079kql025uxfd2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/01/pyspark-error/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          pyspark 报错问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/31/install-single-node-zookeeper/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">单节点 zookeeper 安装</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 YYChildren<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
