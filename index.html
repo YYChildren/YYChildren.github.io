@@ -62,7 +62,7 @@
       <div id="main" class="wrapper">
         <div id="primary" class="site-content"><div id="content" role="main">
   
-    <article id="post-moosefs-install-md" class="post-moosefs-install-md post type-post status-publish format-standard hentry">
+    <article id="post-moosefs-install" class="post-moosefs-install post type-post status-publish format-standard hentry">
     <!---->
 
       <header class="entry-header">
@@ -70,14 +70,14 @@
         
   
     <h1 class="entry-title">
-      <a class="article-title" href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+      <a class="article-title" href="/2018/04/04/moosefs-install/">ubuntu下安装MooseFS单机版</a>
     </h1>
   
 
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install-md/" data-id="cjfknx24j00099wql5mlrzaa3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install/" data-id="cjfko30ux00000gqlpvbwsnbi" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -94,9 +94,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://ppa.moosefs.com/moosefs-3/apt/ubuntu/xenial xenial main&quot; &gt; /etc/apt/sources.list.d/moosefs.list</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Then run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
 <h3 id="安装-moosefs-master"><a href="#安装-moosefs-master" class="headerlink" title="安装 moosefs-master"></a>安装 moosefs-master</h3><ul>
 <li><p>安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-master</span><br></pre></td></tr></table></figure>
@@ -109,11 +109,11 @@
 </li>
 </ul>
 <h3 id="安装-moosefs-chunkserver"><a href="#安装-moosefs-chunkserver" class="headerlink" title="安装 moosefs-chunkserver"></a>安装 moosefs-chunkserver</h3><ul>
-<li>安装</li>
-</ul>
+<li><p>安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-chunkserver</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <blockquote>
@@ -153,16 +153,18 @@
 <li><p>强烈建议在不是master节点的机器上安装至少一个Metalogger, Metalogger 不断地同步和备份元数据。</p>
 </li>
 <li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">* 启动</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmetalogger start</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>mfsmetalogger start<br><code>`</code></p>
 
       
     </div><!-- .entry-content -->
 
     <footer class="entry-meta">
-    <a href="/2018/04/04/moosefs-install-md/">
+    <a href="/2018/04/04/moosefs-install/">
     <time datetime="2018-04-04T04:26:07.000Z" class="entry-date">
         2018-04-04
     </time>
@@ -779,7 +781,7 @@
       <ul>
         
           <li>
-            <a href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+            <a href="/2018/04/04/moosefs-install/">ubuntu下安装MooseFS单机版</a>
           </li>
         
           <li>

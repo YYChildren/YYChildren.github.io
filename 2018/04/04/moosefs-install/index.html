@@ -23,11 +23,11 @@ Add the key:
   <meta name="description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ubuntu下安装MooseFS单机版">
-<meta property="og:url" content="http://yoursite.com/2018/04/04/moosefs-install-md/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/04/04/moosefs-install/index.html">
 <meta property="og:site_name" content="YYChildren&#39;s Garden">
 <meta property="og:description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-04T05:11:37.818Z">
+<meta property="og:updated_time" content="2018-04-04T05:43:06.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu下安装MooseFS单机版">
 <meta name="twitter:description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
@@ -71,7 +71,7 @@ Add the key:
     </nav>
 </header>
       <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-moosefs-install-md" class="post-moosefs-install-md post type-post status-publish format-standard hentry">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-moosefs-install" class="post-moosefs-install post type-post status-publish format-standard hentry">
     <!---->
 
       <header class="entry-header">
@@ -86,7 +86,7 @@ Add the key:
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install-md/" data-id="cjfknx24j00099wql5mlrzaa3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install/" data-id="cjfko30ux00000gqlpvbwsnbi" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -103,9 +103,9 @@ Add the key:
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://ppa.moosefs.com/moosefs-3/apt/ubuntu/xenial xenial main&quot; &gt; /etc/apt/sources.list.d/moosefs.list</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Then run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
 <h3 id="安装-moosefs-master"><a href="#安装-moosefs-master" class="headerlink" title="安装 moosefs-master"></a>安装 moosefs-master</h3><ul>
 <li><p>安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-master</span><br></pre></td></tr></table></figure>
@@ -118,11 +118,11 @@ Add the key:
 </li>
 </ul>
 <h3 id="安装-moosefs-chunkserver"><a href="#安装-moosefs-chunkserver" class="headerlink" title="安装 moosefs-chunkserver"></a>安装 moosefs-chunkserver</h3><ul>
-<li>安装</li>
-</ul>
+<li><p>安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-chunkserver</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <blockquote>
@@ -162,16 +162,18 @@ Add the key:
 <li><p>强烈建议在不是master节点的机器上安装至少一个Metalogger, Metalogger 不断地同步和备份元数据。</p>
 </li>
 <li><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">* 启动</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmetalogger start</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>mfsmetalogger start<br><code>`</code></p>
 
       
     </div><!-- .entry-content -->
 
     <footer class="entry-meta">
-    <a href="/2018/04/04/moosefs-install-md/">
+    <a href="/2018/04/04/moosefs-install/">
     <time datetime="2018-04-04T04:26:07.000Z" class="entry-date">
         2018-04-04
     </time>
@@ -218,7 +220,7 @@ Add the key:
       <ul>
         
           <li>
-            <a href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+            <a href="/2018/04/04/moosefs-install/">ubuntu下安装MooseFS单机版</a>
           </li>
         
           <li>
