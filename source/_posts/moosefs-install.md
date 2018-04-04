@@ -29,7 +29,6 @@ echo "deb http://ppa.moosefs.com/moosefs-3/apt/ubuntu/xenial xenial main" > /etc
 ```
 
 * Then run:
-
 ```
 apt update
 ```
@@ -54,7 +53,6 @@ mfsmaster start
 ### 安装 moosefs-chunkserver
 
 * 安装
-
 ```
 apt install moosefs-chunkserver
 ```
@@ -120,7 +118,7 @@ mfscgiserv start
 * 安装
 ```
 apt install moosefs-metalogger
-``
+```
 
 * 启动
 ```
