@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。
+资源官方文档https://moosefs.com/
+github 地址https://github.com/moosefs/moosefs
+安装步骤添加源
+Add the key:
+1wget -O - https://pp" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>ubuntu下安装MooseFS单机版 | YYChildren&#39;s Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu下安装MooseFS单机版">
+<meta property="og:url" content="http://yoursite.com/2018/04/04/moosefs-install-md/index.html">
+<meta property="og:site_name" content="YYChildren&#39;s Garden">
+<meta property="og:description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-04T05:11:37.818Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu下安装MooseFS单机版">
+<meta name="twitter:description" content="介绍MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。 资源官方文档https://moosefs.com/ github 地址https://github.com/moosefs/moosefs 安装步骤添加源 Add the key: 1wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -  Add an">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+</head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="YYChildren&#39;s Garden" rel="home">YYChildren&#39;s Garden</a>
+      </h1>
+      
+        <h2 class="site-description">
+          <a href="/" id="subtitle">杯水长情</a>
+        </h2>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-moosefs-install-md" class="post-moosefs-install-md post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      ubuntu下安装MooseFS单机版
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install-md/" data-id="cjfknx24j00099wql5mlrzaa3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。</p>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><p><a href="https://moosefs.com/" target="_blank" rel="noopener">https://moosefs.com/</a></p>
+<h3 id="github-地址"><a href="#github-地址" class="headerlink" title="github 地址"></a>github 地址</h3><p><a href="https://github.com/moosefs/moosefs" target="_blank" rel="noopener">https://github.com/moosefs/moosefs</a></p>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="添加源"><a href="#添加源" class="headerlink" title="添加源"></a>添加源</h3><ul>
+<li><p>Add the key:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add an appropriate repository entry in <code>/etc/apt/sources.list.d/moosefs.list</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://ppa.moosefs.com/moosefs-3/apt/ubuntu/xenial xenial main&quot; &gt; /etc/apt/sources.list.d/moosefs.list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Then run:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+<h3 id="安装-moosefs-master"><a href="#安装-moosefs-master" class="headerlink" title="安装 moosefs-master"></a>安装 moosefs-master</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmaster start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加host: <code>/etc/hosts</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.8.30 mfsmaster</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="安装-moosefs-chunkserver"><a href="#安装-moosefs-chunkserver" class="headerlink" title="安装 moosefs-chunkserver"></a>安装 moosefs-chunkserver</h3><ul>
+<li>安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-chunkserver</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>建议使用XFS作为底层文件系统</p>
+</blockquote>
+<ul>
+<li><p>创建目录和授权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br><span class="line">chown mfs:mfs /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br><span class="line">chmod 770 /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfschunkserver start</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="客户端：挂载MooseFS-文件系统"><a href="#客户端：挂载MooseFS-文件系统" class="headerlink" title="客户端：挂载MooseFS 文件系统"></a>客户端：挂载MooseFS 文件系统</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-client</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /data/mfs</span><br><span class="line">mount -t moosefs mfsmaster: /data/mfs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以在<code>/etc/fstab</code>下添加MooseFS 的挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmaster:    /data/mfs    moosefs    defaults,mfsdelayedinit    0 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在，可以切换到 <code>/data/mfs</code> 管理你的文件</p>
+</li>
+</ul>
+<h3 id="web-监控（可选）"><a href="#web-监控（可选）" class="headerlink" title="web 监控（可选）"></a>web 监控（可选）</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-cgi moosefs-cgiserv moosefs-cli</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动web监控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfscgiserv start</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在<a href="http://mfsmaster:9425" target="_blank" rel="noopener">http://mfsmaster:9425</a> 查看moose文件系统情况</p>
+<h3 id="moosefs-metalogger（可选，建议）"><a href="#moosefs-metalogger（可选，建议）" class="headerlink" title="moosefs-metalogger（可选，建议）"></a>moosefs-metalogger（可选，建议）</h3><ul>
+<li><p>强烈建议在不是master节点的机器上安装至少一个Metalogger, Metalogger 不断地同步和备份元数据。</p>
+</li>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">* 启动</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>mfsmetalogger start<br><code>`</code></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2018/04/04/moosefs-install-md/">
+    <time datetime="2018-04-04T04:26:07.000Z" class="entry-date">
+        2018-04-04
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+    
+        <span class="nav-next"><a href="/2017/11/01/econfig/" rel="next">基于erlang动态编译的简单配置方案：econfig <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/parse-json-in-impala/">impala 解析json</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/01/pyspark-error/">pyspark 报错问题</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2018 YYChildren
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

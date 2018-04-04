@@ -62,6 +62,122 @@
       <div id="main" class="wrapper">
         <div id="primary" class="site-content"><div id="content" role="main">
   
+    <article id="post-moosefs-install-md" class="post-moosefs-install-md post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2018/04/04/moosefs-install-md/" data-id="cjfknx24j00099wql5mlrzaa3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>MooseFS，是千兆级的分布式的文件系统，遵循 POSIX 协议。</p>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><p><a href="https://moosefs.com/" target="_blank" rel="noopener">https://moosefs.com/</a></p>
+<h3 id="github-地址"><a href="#github-地址" class="headerlink" title="github 地址"></a>github 地址</h3><p><a href="https://github.com/moosefs/moosefs" target="_blank" rel="noopener">https://github.com/moosefs/moosefs</a></p>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="添加源"><a href="#添加源" class="headerlink" title="添加源"></a>添加源</h3><ul>
+<li><p>Add the key:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O - https://ppa.moosefs.com/moosefs.key | apt-key add -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add an appropriate repository entry in <code>/etc/apt/sources.list.d/moosefs.list</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://ppa.moosefs.com/moosefs-3/apt/ubuntu/xenial xenial main&quot; &gt; /etc/apt/sources.list.d/moosefs.list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Then run:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+<h3 id="安装-moosefs-master"><a href="#安装-moosefs-master" class="headerlink" title="安装 moosefs-master"></a>安装 moosefs-master</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmaster start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加host: <code>/etc/hosts</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.8.30 mfsmaster</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="安装-moosefs-chunkserver"><a href="#安装-moosefs-chunkserver" class="headerlink" title="安装 moosefs-chunkserver"></a>安装 moosefs-chunkserver</h3><ul>
+<li>安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-chunkserver</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在<code>/etc/mfs/mfshdd.cfg</code> 添加1个或多个路径，作为分区存储数据，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/data/database/mfs/chunks1</span><br><span class="line">/data/database/mfs/chunks2</span><br><span class="line">/data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>建议使用XFS作为底层文件系统</p>
+</blockquote>
+<ul>
+<li><p>创建目录和授权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br><span class="line">chown mfs:mfs /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br><span class="line">chmod 770 /data/database/mfs/chunks1 /data/database/mfs/chunks2 /data/database/mfs/chunks3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfschunkserver start</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="客户端：挂载MooseFS-文件系统"><a href="#客户端：挂载MooseFS-文件系统" class="headerlink" title="客户端：挂载MooseFS 文件系统"></a>客户端：挂载MooseFS 文件系统</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-client</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /data/mfs</span><br><span class="line">mount -t moosefs mfsmaster: /data/mfs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以在<code>/etc/fstab</code>下添加MooseFS 的挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfsmaster:    /data/mfs    moosefs    defaults,mfsdelayedinit    0 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在，可以切换到 <code>/data/mfs</code> 管理你的文件</p>
+</li>
+</ul>
+<h3 id="web-监控（可选）"><a href="#web-监控（可选）" class="headerlink" title="web 监控（可选）"></a>web 监控（可选）</h3><ul>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-cgi moosefs-cgiserv moosefs-cli</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动web监控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mfscgiserv start</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在<a href="http://mfsmaster:9425" target="_blank" rel="noopener">http://mfsmaster:9425</a> 查看moose文件系统情况</p>
+<h3 id="moosefs-metalogger（可选，建议）"><a href="#moosefs-metalogger（可选，建议）" class="headerlink" title="moosefs-metalogger（可选，建议）"></a>moosefs-metalogger（可选，建议）</h3><ul>
+<li><p>强烈建议在不是master节点的机器上安装至少一个Metalogger, Metalogger 不断地同步和备份元数据。</p>
+</li>
+<li><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install moosefs-metalogger</span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">* 启动</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>mfsmetalogger start<br><code>`</code></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2018/04/04/moosefs-install-md/">
+    <time datetime="2018-04-04T04:26:07.000Z" class="entry-date">
+        2018-04-04
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
     <article id="post-econfig" class="post-econfig post type-post status-publish format-standard hentry">
     <!---->
 
@@ -77,7 +193,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/11/01/econfig/" data-id="cjfeqctea0001vwqlqww7xtr4" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/11/01/econfig/" data-id="cjfknx23v00009wqlzxcuvpi0" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -130,7 +246,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/10/17/parse-json-in-impala/" data-id="cjfeqctek0005vwql009ie01c" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/10/17/parse-json-in-impala/" data-id="cjfknx24h00089wql8d7v7z01" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -191,7 +307,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/04/01/pyspark-error/" data-id="cjfeqcteo0007vwqlk8tsp6va" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/04/01/pyspark-error/" data-id="cjfknx24g00079wql9iizmqo3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -241,7 +357,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/02/05/namenode-start-failed-for-snapshot/" data-id="cjfeqctem0006vwql9w59p4qh" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/02/05/namenode-start-failed-for-snapshot/" data-id="cjfknx24d00069wqli0ruf4xw" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -319,7 +435,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/08/31/install-single-node-zookeeper/" data-id="cjfeqctei0004vwqlr0i08rz4" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/08/31/install-single-node-zookeeper/" data-id="cjfknx24500029wqlij3qdebf" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -368,7 +484,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/08/11/install-openresty-on-centos6/" data-id="cjfeqctee0002vwqluk4mgn2p" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/08/11/install-openresty-on-centos6/" data-id="cjfknx24200019wqlwj0jzxfq" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -427,7 +543,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/05/apache-https-setting/" data-id="cjfeqcteq0008vwqljtb07vo0" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/05/apache-https-setting/" data-id="cjfknx24700039wqlrr5gu7z7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -485,7 +601,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/04/install-cloudera-5.7.0-mirror/" data-id="cjfeqcte30000vwql4d4xl1qs" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/04/install-cloudera-5.7.0-mirror/" data-id="cjfknx24l000a9wqlcou1exy8" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -545,7 +661,7 @@
         
         <div class="comments-link">
             
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/04/install-cdh-5.7/" data-id="cjfeqctes0009vwqloqfkr3rk" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/05/04/install-cdh-5.7/" data-id="cjfknx24a00049wqlju4snioe" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
         </div><!-- .comments-link -->
       </header><!-- .entry-header -->
 
@@ -634,93 +750,12 @@
 
 
   
-    <article id="post-program-in-my-eyes" class="post-program-in-my-eyes post type-post status-publish format-standard hentry">
-    <!---->
-
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title">
-      <a class="article-title" href="/2016/04/24/program-in-my-eyes/">我眼中的程序</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://yoursite.com/2016/04/24/program-in-my-eyes/" data-id="cjfeqcteg0003vwql12cwk9f0" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>随着程序越写越多，接触的语言逐渐广泛，开始思考程序到底是什么，怎样编写程序。以下是个人的一些理解，并非权威定义，欢迎探讨与批判。</p>
-<h2 id="通常介绍"><a href="#通常介绍" class="headerlink" title="通常介绍"></a>通常介绍</h2><p><strong>尼古拉斯·沃斯</strong> ：<strong>算法+数据结构=程序</strong></p>
-<h2 id="我的理解"><a href="#我的理解" class="headerlink" title="我的理解"></a>我的理解</h2><p><strong>算法</strong>：对于0个或多个输入数据进行一系列有限步骤之后得出1个或以上的输出结果。本质上是一个<strong>行为说明书</strong>。<br><strong>数据结构</strong>：对数据以及数据之间的关联关系的描述。本质上就是<strong>数据</strong>。<br><strong>程序</strong>：通过上面的理解，可以认为<code>程序=数据+行为</code></p>
-<ul>
-<li>这样说或许比较抽象，可以参考一个例子：</li>
-<li>我从商场买了回来一个吊扇，现在我要把她装到我的床上：</li>
-<li>那么：</li>
-<li><strong>数据</strong>：里面的螺丝、扇翼等基本配件可以认为是数据。</li>
-<li><strong>行为</strong>：介绍如可安装电风扇的说明说就是行为。</li>
-</ul>
-<h2 id="程序在编程语言上的体现"><a href="#程序在编程语言上的体现" class="headerlink" title="程序在编程语言上的体现"></a>程序在编程语言上的体现</h2><p><strong>编程语言</strong>大致可以分为三种：</p>
-<hr>
-<ul>
-<li>面向过程：</li>
-</ul>
-<ol>
-<li>对于一个问题，详细描述解决问题的过程。</li>
-<li>典型代表，C语言</li>
-</ol>
-<ul>
-<li>面向对象：</li>
-</ul>
-<ol>
-<li>重在数据，通过封装将数据抽象化，将方法应用于特定抽象化数据。</li>
-<li>工业界主流，C++、Java、Python等</li>
-</ol>
-<ul>
-<li>函数式编程：</li>
-</ul>
-<ol>
-<li>重在行为，将行为定义成函数，函数可作为参数传递以及作为返回值返回。</li>
-<li>schema、erlang、scala等。</li>
-</ol>
-<hr>
-<p>可以看到实际上面向对象实际上将重点放在数据的组织上，让程序看起来就像是现实世界上不同个体与整体的映射。<br>而函数式编程这是重在行为，意看起来是将现实中的种种方法步骤以函数作为载体映射到程序里。<br>至于面向过程，我使用较少，不做评论。</p>
-<hr>
-<p>那么有没有数据和行为都重点关注的语言呢？<br>有的，如</p>
-<ul>
-<li>python：面向对象语言，把一切看做对象，函数也是对象。 </li>
-<li>scala：函数式编程语言，运行于Java虚拟机。虽然推崇函数式编程，但也提供了对象的封装。</li>
-</ul>
-<h2 id="编程语言的两个极端"><a href="#编程语言的两个极端" class="headerlink" title="编程语言的两个极端"></a>编程语言的两个极端</h2><ul>
-<li>Lisp：计算的需求，也就是行为的体现。</li>
-<li>C：抽象的需求，也就是数据的体现。</li>
-</ul>
-
-      
-    </div><!-- .entry-content -->
-
-    <footer class="entry-meta">
-    <a href="/2016/04/24/program-in-my-eyes/">
-    <time datetime="2016-04-24T15:29:58.000Z" class="entry-date">
-        2016-04-24
-    </time>
-</a>
-    
-    
-    </footer>
-</article>
-
-
-
-
-
-
-  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      </nav>
+    </nav>
   
 
 </div></div>
@@ -744,6 +779,10 @@
       <ul>
         
           <li>
+            <a href="/2018/04/04/moosefs-install-md/">ubuntu下安装MooseFS单机版</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/01/econfig/">基于erlang动态编译的简单配置方案：econfig</a>
           </li>
         
@@ -757,10 +796,6 @@
         
           <li>
             <a href="/2017/02/05/namenode-start-failed-for-snapshot/">Hadoop NameNode 无法启动：删除SnapShot所导致</a>
-          </li>
-        
-          <li>
-            <a href="/2016/08/31/install-single-node-zookeeper/">单节点 zookeeper 安装</a>
           </li>
         
       </ul>
