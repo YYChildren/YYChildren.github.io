@@ -309,6 +309,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yychildren.github.io/2018/07/14/edatx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YYChildren">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YYChildren's Garden">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/14/edatx/" itemprop="url">解析 ipip.net datx 格式的Erlang代码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-14T08:46:18+08:00">2018-07-14</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/14/edatx/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/07/14/edatx/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/14/edatx/" class="leancloud_visitors" data-flag-title="解析 ipip.net datx 格式的Erlang代码">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="解析ipip-net-datx-文件"><a href="#解析ipip-net-datx-文件" class="headerlink" title="解析ipip.net datx 文件"></a>解析ipip.net datx 文件</h2><p>ipip.net 提供datx 格式的IP库文件， 不再提供 dat格式的IP地址库文件更新，</p>
+<blockquote>
+<p>1、为方便用户使用，现统一提供DATX 格式的数据版本，查询性能比 DAT 版本快很多倍，具体请见后台文档说明。</p>
+<p>2、本付费服务仅授权于一家公司内使用，如果您需要给关联公司使用，请与我们的售前客服联系。</p>
+</blockquote>
+<p>ipip.net 本身并没有提供Erlang的解析代码，所以就自己参照<a href="https://github.com/ipipdotnet/datx-python" target="_blank" rel="noopener">Python解析代码</a>实现了一个，edatx.</p>
+<p>这个实现支持免费版IP库： 17monipdb.datx</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 查询地级市精度的IP库</span></span><br><span class="line"></span><br><span class="line">City = edatx_city:init(<span class="string">"/path/to/mydata4vipday2.datx"</span>).</span><br><span class="line">io:format(<span class="string">"~ts,~ts,~ts,~ts~n"</span>, edatx_city:find(<span class="string">"8.8.8.258"</span>, City)).</span><br><span class="line">io:format(<span class="string">"~ts,~ts,~ts,~ts~n"</span>, edatx_city:find(<span class="string">"255.255.255.255"</span>, City)).</span><br></pre></td></tr></table></figure>
+<h2 id="edatx-的-github-地址"><a href="#edatx-的-github-地址" class="headerlink" title="edatx 的 github 地址"></a>edatx 的 github 地址</h2><p><a href="https://github.com/YYChildren/edatx" target="_blank" rel="noopener">https://github.com/YYChildren/edatx</a></p>
+<h2 id="数据下载地址"><a href="#数据下载地址" class="headerlink" title="数据下载地址"></a>数据下载地址</h2><p><a href="https://www.ipip.net/product/ip.html" target="_blank" rel="noopener">https://www.ipip.net/product/ip.html</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yychildren.github.io/2018/04/04/moosefs-install/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1798,212 +1952,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yychildren.github.io/2016/05/04/install-cdh-5.7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="YYChildren">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YYChildren's Garden">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/05/04/install-cdh-5.7/" itemprop="url">CDH 5.7 安装</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-04T17:54:01+08:00">2016-05-04</time>
-            
-
-            
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/05/04/install-cdh-5.7/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2016/05/04/install-cdh-5.7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2016/05/04/install-cdh-5.7/" class="leancloud_visitors" data-flag-title="CDH 5.7 安装">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="搭建镜像"><a href="#搭建镜像" class="headerlink" title="搭建镜像"></a>搭建镜像</h2><p>安装位置：192.168.8.209<br>参考:<a href="http://yychildren.leanote.com/post/安装Cloudera-5.7.0镜像/" target="_blank" rel="noopener">http://yychildren.leanote.com/post/安装Cloudera-5.7.0镜像/</a></p>
-<h2 id="准备三台机器"><a href="#准备三台机器" class="headerlink" title="准备三台机器"></a>准备三台机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ycj1.mingchao.com</span><br><span class="line">ycj2.mingchao.com</span><br><span class="line">ycj3.mingchao.com</span><br></pre></td></tr></table></figure>
-<h2 id="安装基本软件"><a href="#安装基本软件" class="headerlink" title="安装基本软件"></a>安装基本软件</h2><h3 id="安装yum库"><a href="#安装yum库" class="headerlink" title="安装yum库"></a>安装yum库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>163的yum库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.163.com/.help/CentOS6-Base-163.repo -P /etc/yum.repos.d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>epel库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="基本软件"><a href="#基本软件" class="headerlink" title="基本软件"></a>基本软件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim lrzsz python openssh openssh-clients</span><br><span class="line"># vim</span><br><span class="line"># lrzsz</span><br><span class="line"># python 2.6/2.7</span><br><span class="line"># openssh</span><br><span class="line"># openssh-clients</span><br></pre></td></tr></table></figure>
-<h2 id="host-设置"><a href="#host-设置" class="headerlink" title="host 设置"></a>host 设置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 你的镜像服务器，参考&quot;安装Cloudera 5.7.0镜像&quot;</span><br><span class="line">192.168.8.209 archive.cloudera.com</span><br><span class="line"></span><br><span class="line">192.168.116.21 ycj1.mingchao.com</span><br><span class="line">192.168.116.22 ycj2.mingchao.com</span><br><span class="line">192.168.116.23 ycj3.mingchao.com</span><br></pre></td></tr></table></figure>
-<h2 id="生成ssh密钥对"><a href="#生成ssh密钥对" class="headerlink" title="生成ssh密钥对"></a>生成ssh密钥对</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
-<h2 id="添加公钥"><a href="#添加公钥" class="headerlink" title="添加公钥"></a>添加公钥</h2><p>ycj1.mingchao.com上做<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id ycj1.mingchao.com</span><br><span class="line">ssh-copy-id ycj2.mingchao.com</span><br><span class="line">ssh-copy-id ycj3.mingchao.com</span><br></pre></td></tr></table></figure></p>
-<h2 id="禁用selinux"><a href="#禁用selinux" class="headerlink" title="禁用selinux"></a>禁用selinux</h2><p><strong>参考：</strong><a href="http://www.thegeekstuff.com/2009/06/how-to-disable-selinux-redhat-fedora-debian-unix/" target="_blank" rel="noopener">http://www.thegeekstuff.com/2009/06/how-to-disable-selinux-redhat-fedora-debian-unix/</a><br><strong>永久</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/selinux/config</span><br><span class="line">## 之后重启电脑</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># This file controls the state of SELinux on the system.</span><br><span class="line"># SELINUX= can take one of these three values:</span><br><span class="line">#       enforcing - SELinux security policy is enforced.</span><br><span class="line">#       permissive - SELinux prints warnings instead of enforcing.</span><br><span class="line">#       disabled - No SELinux policy is loaded.</span><br><span class="line">SELINUX=disabled</span><br><span class="line"># SELINUXTYPE= can take one of these two values:</span><br><span class="line">#       targeted - Targeted processes are protected,</span><br><span class="line">#       mls - Multi Level Security protection.</span><br><span class="line">SELINUXTYPE=targeted</span><br></pre></td></tr></table></figure>
-<p><strong>临时</strong>（没成功）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo 0 &gt; /selinux/enforce</span><br><span class="line">## or</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure></p>
-<p><strong>查看selinux状态</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getenforce</span><br><span class="line"># Disabled</span><br></pre></td></tr></table></figure></p>
-<h2 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h2><p><strong>永久（需重启）</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig iptables off</span><br></pre></td></tr></table></figure></p>
-<p><strong>临时</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop</span><br></pre></td></tr></table></figure></p>
-<h2 id="yum-不检验ssl"><a href="#yum-不检验ssl" class="headerlink" title="yum 不检验ssl"></a>yum 不检验ssl</h2><p><strong>原因是5.7.0的访问以https的形式</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 在/etc/yum.conf 下添加</span><br><span class="line">sslverify=false</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装Cloudera-manager"><a href="#安装Cloudera-manager" class="headerlink" title="安装Cloudera manager"></a>安装Cloudera manager</h2><p><strong>ycj1.mingchao.com上做</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.cloudera.com/cm5/installer/5.7.0/cloudera-manager-installer.bin</span><br><span class="line">chmod u+x cloudera-manager-installer.bin</span><br><span class="line"># 从Internet安装</span><br><span class="line">sudo ./cloudera-manager-installer.bin</span><br><span class="line"># 从本地库安装 （这里不采用）</span><br><span class="line">sudo ./cloudera-manager-installer.bin --skip_repo_package=1</span><br></pre></td></tr></table></figure></p>
-<p><strong>安装完后等待，直到</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat -anp | grep 7180</span><br><span class="line"># tcp        0      0 0.0.0.0:7180</span><br><span class="line"># 0.0.0.0:*                   LISTEN      1676/java</span><br></pre></td></tr></table></figure></p>
-<h2 id="cloudera-manager"><a href="#cloudera-manager" class="headerlink" title="cloudera-manager"></a>cloudera-manager</h2><h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p>链接：<a href="http://192.168.116.21:7180/" target="_blank" rel="noopener">http://192.168.116.21:7180/</a><br>账号：admin<br>密码：admin</p>
-<h3 id="下一步到"><a href="#下一步到" class="headerlink" title="下一步到"></a>下一步到</h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000437" alt=""></p>
-<hr>
-<p><strong>可以选择使用数据包或者使用Parcel</strong><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043f" alt=""></p>
-<hr>
-<p><strong>使用以下搜索主机：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ycj[1-3].mingchao.com</span><br></pre></td></tr></table></figure></p>
-<h3 id="继续–安装JDK"><a href="#继续–安装JDK" class="headerlink" title="继续–安装JDK"></a><strong>继续–安装JDK</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e3000447" alt=""></p>
-<hr>
-<p>选定：<br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e300044d" alt=""></p>
-<h3 id="继续–SSH登录凭据"><a href="#继续–SSH登录凭据" class="headerlink" title="继续–SSH登录凭据"></a><strong>继续–SSH登录凭据</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000439" alt=""></p>
-<hr>
-<p>选择：<br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000435" alt=""></p>
-<hr>
-<p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000443" alt=""></p>
-<h3 id="继续–等待安装"><a href="#继续–等待安装" class="headerlink" title="继续–等待安装"></a><strong>继续–等待安装</strong></h3><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000433" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000431" alt=""></p>
-<h2 id="权限问题解决"><a href="#权限问题解决" class="headerlink" title="权限问题解决"></a>权限问题解决</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo -u hdfs hadoop fs -chmod 777  /</span><br><span class="line">sudo -u hdfs hadoop fs -mkdir -p /user/spark/applicationHistory</span><br><span class="line">sudo -u hdfs hadoop fs -chown -R spark /user/spark</span><br><span class="line">sudo -u hdfs hadoop fs -chmod 1777 /user/spark/applicationHistory</span><br></pre></td></tr></table></figure>
-<h3 id="安装完成"><a href="#安装完成" class="headerlink" title="安装完成"></a>安装完成</h3><h2 id="证书问题"><a href="#证书问题" class="headerlink" title="证书问题"></a>证书问题</h2><blockquote>
-<h4 id="报错："><a href="#报错：" class="headerlink" title="报错："></a><strong>报错：</strong></h4><p><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043b" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e3000449" alt=""></p>
-<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a><strong>原因</strong></h4><p>没有cloudera的证书</p>
-<h4 id="解决"><a href="#解决" class="headerlink" title="解决"></a><strong>解决</strong></h4><ul>
-<li>中止安装</li>
-<li>yum 不验证ssl<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;# 在/etc/yum.conf 下添加</span><br><span class="line">&gt;sslverify=false</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<ul>
-<li>卸载失败的主机</li>
-<li>重试失败的主机<h4 id="添加证书"><a href="#添加证书" class="headerlink" title="添加证书"></a><strong>添加证书</strong></h4>但在CentOS 6下无效的方法，已经被确定为CentOS的bug：<a href="https://www.centos.org/forums/viewtopic.php?t=1073" target="_blank" rel="noopener">https://www.centos.org/forums/viewtopic.php?t=1073</a><br><strong>更新ca-certificates</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;yum --disablerepo=cloudera-manager -y update ca-certificates</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<p><strong>导出cloudera的证书为cloudera.cer</strong><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000445" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e3000441" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfeceab644121e300043d" alt=""><br><img src="https://leanote.com/api/file/getImage?fileId=587dfecfab644121e300044b" alt=""><br><strong>导入证书</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">转换格式 .cer 到 .pem</span><br><span class="line">openssl x509 -inform der -in cloudera.cer  -out cloudera.pem</span><br><span class="line">追加到信任列表</span><br><span class="line">cat cloudera.pem &gt;&gt; /etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_install_path_a.html#cmig_topic_6_5" target="_blank" rel="noopener">http://www.cloudera.com/documentation/enterprise/latest/topics/cm_ig_install_path_a.html#cmig_topic_6_5</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2051,7 +1999,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
